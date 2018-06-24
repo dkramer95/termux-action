@@ -1,0 +1,67 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# termux-action-launch
+# Allows scripts that need an active Termux session to be executed
+# A new termux session will be brought to the foreground, even if
+# the Termux app isn't currently running.
+
+# It is recommended that this be launched when Termux isn't the active
+# application, as launching it while its already in the foreground will
+# not automatically switch to the newly created session
+
+# Launchable scripts must be placed in the LAUNCH_DIR as defined below
+
+
+# Constants for launching service
+readonly SERVICE="com.termux/com.termux.app.TermuxService"
+readonly ACTION="com.termux.service_execute"
+
+# Directory that stores all executable scripts
+LAUNCH_DIR=".shortcuts/termux_launchables"
+
+# Constants that contain proper prefix to script path
+readonly PREFIX="/data/data/com.termux/files/home/$LAUNCH_DIR"
+readonly DATA_PREFIX="com.termux.file:$PREFIX"
+
+# Toast colors
+readonly WARNING_BG="yellow"
+readonly WARNING_FG="black"
+readonly ERROR_BG="red"
+
+
+# Launch the specified script through Termux
+# This function takes 1 argument which is the name of the script to execute
+function termuxLaunch {
+    echo "Launching '$1'..."
+    am startservice -a $ACTION -d $DATA_PREFIX/$1 $SERVICE > /dev/null
+}
+
+function show_usage {
+    echo "Usage: termux-launch script"
+    echo "Create a new termux session to execute script"
+    echo "script must exist in $PREFIX"
+    exit 1
+}
+
+function run {
+    if [ $# -ne 1 ]; then
+        error="ERROR: Invalid argument"
+        echo $error
+        termux-toast -b $WARNING_COLOR $error
+        show_usage
+    fi
+
+    script=$1
+
+    if ! [ -f $PREFIX/$script ]; then
+        error="ERROR: Script '$PREFIX/$script' does not exist!"
+        echo $error
+        termux-toast -b red $error
+        exit 1
+    fi
+
+    termux-toast "Launching: $script"
+    termuxLaunch $script
+}
+
+run $@
