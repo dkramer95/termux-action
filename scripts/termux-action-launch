@@ -17,7 +17,7 @@ readonly SERVICE="com.termux/com.termux.app.TermuxService"
 readonly ACTION="com.termux.service_execute"
 
 # Directory that stores all executable scripts
-LAUNCH_DIR=".shortcuts/termux_launchables"
+LAUNCH_DIR=".termux-actions/launch"
 
 # Constants that contain proper prefix to script path
 readonly PREFIX="/data/data/com.termux/files/home/$LAUNCH_DIR"
@@ -53,6 +53,7 @@ function run {
 
     script=$1
 
+    # Ensure script exists
     if ! [ -f $PREFIX/$script ]; then
         error="ERROR: Script '$PREFIX/$script' does not exist!"
         echo $error
@@ -60,8 +61,12 @@ function run {
         exit 1
     fi
 
-    termux-toast "Launching: $script"
-    termuxLaunch $script
+    # Ensure we only attempt to run files that are executable!
+    if [ -x $PREFIX/$script ]; then
+        echo "Launching: $script"
+        termux-toast "Launching: $script"
+        termuxLaunch "$script"
+    fi
 }
 
 run $@
