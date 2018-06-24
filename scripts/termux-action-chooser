@@ -12,7 +12,12 @@ RESULT_FIELD="text"
 
 values=""
 for x in $(ls $ACTIONS_PATH); do
-    values+="$x,"
+    file=$ACTIONS_PATH/$x
+
+    # Only include executable scripts
+    if [ -x $file ]; then
+        values+="$x,"
+    fi
 done
 
 # Obtain values using sheet and strip out brackets and quotes
