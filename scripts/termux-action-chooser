@@ -1,0 +1,37 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+readonly ACTIONS_DIR=".termux-actions"
+readonly ACTIONS_PATH="/data/data/com.termux/files/home/$ACTIONS_DIR"
+
+TYPE="sheet"
+TITLE="Pick actions to run via termux"
+
+RESULT_FIELD="text"
+
+# Create a csv of all scripts in actions dir
+
+values=""
+for x in $(ls $ACTIONS_PATH); do
+    values+="$x,"
+done
+
+# Obtain values using sheet and strip out brackets and quotes
+result=$(termux-dialog "$TYPE" -v $values -t "$TITLE" \
+        | grep 'text' \
+        | cut -d ':' -f 2 \
+        | awk ' { print tolower($0) }' \
+        | sed 's/["\[\]//g' \
+        | awk -F, ' { for (i=1; i<=NF; i++) print $i }' )
+
+
+# Execute our selection results
+for action in $result; do
+    file_path=$ACTIONS_PATH/$action
+
+    if [ -f $file_path ]; then
+        echo "evaluating: $file_path"
+        eval $file_path
+    else
+        echo "ERROR: $file_path doesn't exist!"
+    fi
+done
