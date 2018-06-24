@@ -1,0 +1,30 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# termux-action-notification
+# Uses termux-notification to create a persistent notification that calls
+# termux-action chooser, allowing access to launching scripts by tapping
+# on the notification from anywhere
+
+
+# Directory that stores all executable actions
+readonly PREFIX="~/.termux-actions"
+
+# Our persistent notification id
+readonly NOTIF_ID=4422
+
+# Main display text in our notification
+readonly TITLE="Tap to choose action"
+
+
+function run {
+    action="termux-action-notification && termux-action-chooser"
+    close_action="termux-notification-remove $NOTIF_ID"
+
+    # Accidental deletes will auto recreate notification
+    # Add explicit close button for when we really no longer want it
+    termux-notification --action "$action" --on-delete "$action" \
+                        --button1 "Close"  --button1-action "$close_action" \
+                        --content "$TITLE" --id "$NOTIF_ID"
+}
+
+run
