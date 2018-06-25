@@ -15,7 +15,7 @@ for x in $(ls $ACTIONS_PATH); do
     file=$ACTIONS_PATH/$x
 
     # Only include executable scripts
-    if [ -x $file ]; then
+    if [ -x $file ] && ! [ -d $file ]; then
         values+="$x,"
     fi
 done
