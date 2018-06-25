@@ -8,7 +8,7 @@ Launch and execute scripts faster through a shortcut selection interface using t
 ## Installation
 `git clone https://github.com/dkramer95/termux-action`
 
-Run `termux-action-install` which will install the package and needed dependencies
+Run `install` which will install the scripts and needed dependencies
 
 ## Usage
 For [Termux:Boot](https://github.com/termux/termux-boot) users, a persistent notification will be created automatically and show on boot (*recommended*). To manually show notification, type `termux-action-notification`. This notification provides an entry point to the `termux-action-chooser` interface. The notification will remain in place unless you click the explicit 'close' button.
