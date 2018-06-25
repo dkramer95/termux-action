@@ -1,0 +1,26 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+BIN="/data/data/com.termux/files/usr/bin"
+PREFIX="/data/data/com.termux/files/home"
+ACTION_DIR=".termux-actions"
+LAUNCH_DIR="$ACTION_DIR/launch"
+
+pkg install termux-api
+
+for x in $(ls scripts); do
+    cp scripts/$x $BIN/$x
+    echo "Installing $x"
+done
+
+# Ensure our action dirs exist
+mkdir -p "$PREFIX/$ACTION_DIR"
+mkdir -p "$PREFIX/$LAUNCH_DIR"
+
+# Place termux-action-notification in termux boot dir, if it exists
+# to allow it to run on device startup
+
+if [ -d "$PREFIX/$BOOT_DIR" ]; then
+    boot_script="$PREFIX/$BOOT_DIR/termux-action-boot"
+    echo "termux-action-notification" > $boot_script && chmod +x $boot_script
+    echo "added $boot_script"
+fi
