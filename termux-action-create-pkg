@@ -1,5 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+# Build a package
+# Requires termux-api-package tool
+
 PREFIX="/data/data/com.termux/files/home"
 BOOT_DIR=".termux/boot"
 ACTION_DIR=".termux-actions"
