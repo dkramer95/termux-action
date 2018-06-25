@@ -4,6 +4,7 @@ BIN="/data/data/com.termux/files/usr/bin"
 PREFIX="/data/data/com.termux/files/home"
 ACTION_DIR=".termux-actions"
 LAUNCH_DIR="$ACTION_DIR/launch"
+BOOT_DIR=".termux/boot"
 
 pkg install termux-api
 
