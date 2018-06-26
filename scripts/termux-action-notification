@@ -18,11 +18,12 @@ readonly TITLE="Tap to choose action"
 
 function run {
     action="termux-action-notification && termux-action-chooser"
+    delete_action="termux-action-notification"
     close_action="termux-notification-remove $NOTIF_ID"
 
     # Accidental deletes will auto recreate notification
     # Add explicit close button for when we really no longer want it
-    termux-notification --action "$action" --on-delete "$action" \
+    termux-notification --action "$action" --on-delete "$delete_action" \
                         --button1 "Close"  --button1-action "$close_action" \
                         --content "$TITLE" --id "$NOTIF_ID"
 }
